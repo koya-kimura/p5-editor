@@ -5,11 +5,13 @@ let pg_3d;
 let font;
 let bgm;
 
-var panel;
-var blend0 = 0.0;
-var blend1 = 0.0;
+let fft;
 
-function preload(){
+var panel;
+var blend0 = 0.5;
+var blend1 = 0.5;
+
+function preload() {
   theShader = loadShader("main.vert", "main.frag");
   font = loadFont("../../assets/font/DSEG14ClassicMini-BoldItalic.ttf");
   bgm = loadSound("../../assets/sound/RELOAD_Free_BGM_ver2.mp3")
@@ -17,6 +19,8 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
+
+  fft = fft = new p5.FFT(0.8, 32);
 
   panel = createGui('parameter');
   sliderRange(0, 1, 0.01);
@@ -26,29 +30,39 @@ function setup() {
   panel.addGlobals('blend1');
 
   pg = createGraphics(width, height);
-  pg_3d= createGraphics(width, height, WEBGL);
+  pg_3d = createGraphics(width, height, WEBGL);
 }
 
 function draw() {
+  let spm = fft.analyze();
+  for(let i in spm){
+    spm[i] = map(spm[i], 0, 255, 0, 1);
+  }
+
   background(220);
 
   pg.background(0);
   pg.textFont(font);
   pg.fill(255);
-  pg.textSize(height/5);
+  pg.textSize(height / 5);
   pg.textAlign(CENTER);
-  pg.text("hello world", width/2, height/2);
+  pg.text("hello world", width / 2, height / 2);
 
   pg_3d.background(0);
-  pg_3d.push();
-  pg_3d.rotateX(frameCount / 100);
-  pg_3d.rotateY(frameCount / 100);
-  pg_3d.rotateZ(frameCount / 100);
 
-  pg_3d.fill(255);
-  pg_3d.stroke(255, 0, 0);
-  pg_3d.box(height);
-  pg_3d.pop();
+  pg_3d.fill(255, 100);
+  pg_3d.stroke(255);
+  const boxNum = 10;
+  for (let i = 0; i < boxNum; i++) {
+    pg_3d.push();
+    pg_3d.rotateX(frameCount / 50 - i/10);
+    pg_3d.rotateY(frameCount / 50 - i/10);
+    pg_3d.rotateZ(frameCount / 50 - i/10);
+    pg_3d.translate(height * 0.35 * sin(frameCount / 50 - i / 10), height * 0.35 * cos(frameCount / 50 - i / 10), height * 0.35 * sin(frameCount / 50 - i / 10))
+    pg_3d.box(height * 0.2 * spm[floor(i * spm.length / boxNum)]);
+    pg_3d.pop();
+  }
+
 
   shader(theShader);
 
@@ -64,8 +78,8 @@ function draw() {
   pg_3d.remove();
 }
 
-function keyPressed(){
-  if(bgm.isPlaying()){
+function keyPressed() {
+  if (bgm.isPlaying()) {
     bgm.pause();
   } else {
     bgm.setVolume(0.1)

@@ -10,6 +10,10 @@ uniform float u_blend1;
 
 float pi = 3.14159265358979;
 
+float random(vec2 st){
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
+}
+
 void main(void) {
     vec2 uv = vTexCoord;
 
@@ -21,9 +25,7 @@ void main(void) {
 
     vec4 col = smpColor0*u_blend0+smpColor1*u_blend1;
 
-    gl_FragColor = col;
-}
+    col.rgb += random(uv) * 0.2;
 
-float random(vec2 st){
-    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
+    gl_FragColor = col;
 }

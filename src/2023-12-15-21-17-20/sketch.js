@@ -16,6 +16,8 @@ var blendWhite = 0;
 var blendBlack = 0;
 var distortion = 0.0;
 
+let blendSeed = 100;
+
 function preload() {
   theShader = loadShader("main.vert", "main.frag");
   peShader = loadShader("main.vert", "post.frag");
@@ -30,25 +32,27 @@ function setup() {
 
   fft = fft = new p5.FFT(0.8, 32);
 
-  panel = createGui('parameter');
-  sliderRange(0, 1, 0.01);
-  panel.addGlobals('blend0');
+  // panel = createGui('parameter');
+  // sliderRange(0, 1, 0.01);
+  // panel.addGlobals('blend0');
 
-  sliderRange(0, 1, 0.01);
-  panel.addGlobals('blend1');
+  // sliderRange(0, 1, 0.01);
+  // panel.addGlobals('blend1');
 
-  sliderRange(0, 1, 0.01);
-  panel.addGlobals('blendWhite');
+  // sliderRange(0, 1, 0.01);
+  // panel.addGlobals('blendWhite');
 
-  sliderRange(0, 1, 0.01);
-  panel.addGlobals('blendBlack');
+  // sliderRange(0, 1, 0.01);
+  // panel.addGlobals('blendBlack');
 
-  sliderRange(0, 5, 0.01);
-  panel.addGlobals('distortion');
+  // sliderRange(0, 5, 0.01);
+  // panel.addGlobals('distortion');
 
   pg = createGraphics(width, height);
   pg_3d = createGraphics(width, height, WEBGL);
   pg_main = createGraphics(width, height, WEBGL);
+
+  blendSeed = floor(random(1000));
 }
 
 function draw() {
@@ -59,6 +63,11 @@ function draw() {
     spmAvg += spm[i];
   }
   spmAvg /= spm.length;
+
+  blend0 = constrain(noise(frameCount / 300, blendSeed) * 1.3, 0.3, 0.9);
+  blend1 = constrain(noise(frameCount / 300, blendSeed+1) * 1.3, 0.3, 0.9);
+
+  distortion = pow(spmAvg+0.3, 5.0) + 0.2;
 
   pg.background(0);
   if(noise(frameCount/100, 57) < 0.7){

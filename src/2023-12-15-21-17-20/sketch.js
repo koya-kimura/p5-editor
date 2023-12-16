@@ -61,7 +61,8 @@ function draw() {
     pg_3d.rotateX(frameCount / 50 - i/10);
     pg_3d.rotateY(frameCount / 50 - i/10);
     pg_3d.rotateZ(frameCount / 50 - i/10);
-    pg_3d.translate(height * 0.35 * sin(frameCount / 50 - i / 10), height * 0.35 * cos(frameCount / 50 - i / 10), height * 0.35 * sin(frameCount / 50 - i / 10))
+    pg_3d.translate(height * 0.35 * sin(frameCount / 50 - i / 10), height * 0.35 * cos(frameCount / 50 - i / 10), height * 0.35 * sin(frameCount / 50 - i / 10));
+    pg_3d.translate(height * (noise(frameCount / 200, i, 0) - 0.5), pow(spmAvg, 3) * (noise(frameCount / 200, i, 1) - 0.5), pow(spmAvg, 3) * (noise(frameCount / 200, i, 2) - 0.5))
     pg_3d.box(height * 0.2 * spm[floor(i * spm.length / boxNum)]);
     pg_3d.pop();
   }
@@ -75,6 +76,7 @@ function draw() {
   theShader.setUniform("u_blend0", blend0);
   theShader.setUniform("u_blend1", blend1);
   theShader.setUniform("u_vol", spmAvg);
+  theShader.setUniform("u_noise", noise(frameCount/100));
 
   rect(0, 0, width, height);
 

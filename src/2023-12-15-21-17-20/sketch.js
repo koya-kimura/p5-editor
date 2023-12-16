@@ -35,9 +35,12 @@ function setup() {
 
 function draw() {
   let spm = fft.analyze();
+  let spmAvg = 0;
   for(let i in spm){
     spm[i] = map(spm[i], 0, 255, 0, 1);
+    spmAvg += spm[i];
   }
+  spmAvg /= spm.length;
 
   background(220);
 
@@ -71,6 +74,7 @@ function draw() {
   theShader.setUniform("u_time", frameCount / 100);
   theShader.setUniform("u_blend0", blend0);
   theShader.setUniform("u_blend1", blend1);
+  theShader.setUniform("u_vol", spmAvg);
 
   rect(0, 0, width, height);
 

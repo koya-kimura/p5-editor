@@ -10,6 +10,10 @@ uniform float u_distortion;
 
 float pi = 3.14159265358979;
 
+float random(vec2 st){
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);
+}
+
 void main(void) {
     vec2 uv = vTexCoord;
 
@@ -22,6 +26,11 @@ void main(void) {
 
     col.rgb += vec3(u_white);
     col.rgb -= vec3(u_black);
+
+    if(abs(sin(uv.y+u_time)) > 0.9995){
+        vec2 uvR = vec2(uv.x + random(vec2(uv.x+u_time, uv.y+u_time)) * 0.005, uv.y+random(vec2(uv.x+u_time,uv.y+u_time))*.005);
+        col.rgb = texture2D(u_tex,uvR).rgb;
+    }
 
     gl_FragColor = col;
 }

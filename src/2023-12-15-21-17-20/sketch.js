@@ -60,8 +60,6 @@ function draw() {
   }
   spmAvg /= spm.length;
 
-  background(0);
-
   pg.background(0);
   if(noise(frameCount/100, 57) < 0.7){
     pg.textFont(font[0]);
@@ -75,7 +73,7 @@ function draw() {
 
   pg_3d.background(0);
 
-  pg_3d.fill(255, 100);
+  pg_3d.fill(255, 100+pow(spmAvg, 2)*150);
   pg_3d.stroke(255);
   const boxNum = 10;
   for (let i = 0; i < boxNum; i++) {

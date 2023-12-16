@@ -1,6 +1,8 @@
 let theShader;
+let peShader;
 let pg;
 let pg_3d;
+let pg_main;
 
 let font;
 let bgm;
@@ -10,9 +12,12 @@ let fft;
 var panel;
 var blend0 = 0.5;
 var blend1 = 0.5;
+var blendWhite = 0;
+var blendBlack = 0;
 
 function preload() {
   theShader = loadShader("main.vert", "main.frag");
+  peShader = loadShader("main.vert", "post.frag");
   font = loadFont("../../assets/font/DSEG14ClassicMini-BoldItalic.ttf");
   bgm = loadSound("../../assets/sound/RELOAD_Free_BGM_ver2.mp3")
 }
@@ -29,8 +34,15 @@ function setup() {
   sliderRange(0, 1, 0.01);
   panel.addGlobals('blend1');
 
+  sliderRange(0, 1, 0.01);
+  panel.addGlobals('blendWhite');
+
+  sliderRange(0, 1, 0.01);
+  panel.addGlobals('blendBlack');
+
   pg = createGraphics(width, height);
   pg_3d = createGraphics(width, height, WEBGL);
+  pg_main = createGraphics(width, height, WEBGL);
 }
 
 function draw() {
@@ -61,14 +73,16 @@ function draw() {
     pg_3d.rotateX(frameCount / 50 - i/10);
     pg_3d.rotateY(frameCount / 50 - i/10);
     pg_3d.rotateZ(frameCount / 50 - i/10);
-    pg_3d.translate(height * 0.35 * sin(frameCount / 50 - i / 10), height * 0.35 * cos(frameCount / 50 - i / 10), height * 0.35 * sin(frameCount / 50 - i / 10));
-    pg_3d.translate(height * (noise(frameCount / 200, i, 0) - 0.5), pow(spmAvg, 3) * (noise(frameCount / 200, i, 1) - 0.5), pow(spmAvg, 3) * (noise(frameCount / 200, i, 2) - 0.5))
+    pg_3d.translate(height * 0.35 * sin(frameCount / 50 - i / 10), height * 0.35 * cos(frameCount / 50 - i / 10), height * 0.35 * cos(frameCount / 50 - i / 10));
+    if (spmAvg > 0.5 && noise(frameCount/100) > 0.5){
+      pg_3d.translate(height * 3 * (noise(frameCount / 200, i, 0) - 0.5), height* 3 * (noise(frameCount / 200, i, 1) - 0.5), height * 3 * (noise(frameCount / 200, i, 2) - 0.5))
+    }
     pg_3d.box(height * 0.2 * spm[floor(i * spm.length / boxNum)]);
     pg_3d.pop();
   }
 
 
-  shader(theShader);
+  pg_main.shader(theShader);
 
   theShader.setUniform("u_tex", pg);
   theShader.setUniform("u_tex3d", pg_3d);
@@ -78,10 +92,18 @@ function draw() {
   theShader.setUniform("u_vol", spmAvg);
   theShader.setUniform("u_noise", noise(frameCount/100));
 
+  pg_main.rect(0, 0, width, height);
+
+  shader(peShader);
+
+  peShader.setUniform("u_tex", pg_main);
+  peShader.setUniform("u_time", frameCount / 100);
+
   rect(0, 0, width, height);
 
   pg.remove();
   pg_3d.remove();
+  pg_main.remove();
 }
 
 function keyPressed() {

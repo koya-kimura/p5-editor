@@ -4,7 +4,7 @@ let pg;
 let pg_3d;
 let pg_main;
 
-let font;
+let font = [];
 let bgm;
 
 let fft;
@@ -14,11 +14,14 @@ var blend0 = 0.5;
 var blend1 = 0.5;
 var blendWhite = 0;
 var blendBlack = 0;
+var distortion = 0.0;
 
 function preload() {
   theShader = loadShader("main.vert", "main.frag");
   peShader = loadShader("main.vert", "post.frag");
-  font = loadFont("../../assets/font/DSEG14ClassicMini-BoldItalic.ttf");
+  font[0] = loadFont("../../assets/font/DSEG14ClassicMini-BoldItalic.ttf");
+  font[1] = loadFont("../../assets/font/Harenosora.otf");
+  font[2] = loadFont("../../assets/font/Neoneon.otf");
   bgm = loadSound("../../assets/sound/RELOAD_Free_BGM_ver2.mp3")
 }
 
@@ -40,6 +43,9 @@ function setup() {
   sliderRange(0, 1, 0.01);
   panel.addGlobals('blendBlack');
 
+  sliderRange(0, 5, 0.01);
+  panel.addGlobals('distortion');
+
   pg = createGraphics(width, height);
   pg_3d = createGraphics(width, height, WEBGL);
   pg_main = createGraphics(width, height, WEBGL);
@@ -54,14 +60,18 @@ function draw() {
   }
   spmAvg /= spm.length;
 
-  background(220);
+  background(0);
 
   pg.background(0);
-  pg.textFont(font);
+  if(noise(frameCount/100, 57) < 0.7){
+    pg.textFont(font[0]);
+  } else {
+    pg.textFont(font[floor(random(font.length))]);
+  }
   pg.fill(255);
   pg.textSize(height / 5);
   pg.textAlign(CENTER);
-  pg.text("hello world", width / 2, height / 2);
+  pg.text("hello world", width / 2, height / 2 + height/10);
 
   pg_3d.background(0);
 
@@ -98,6 +108,9 @@ function draw() {
 
   peShader.setUniform("u_tex", pg_main);
   peShader.setUniform("u_time", frameCount / 100);
+  peShader.setUniform("u_white", pow(blendWhite, 2.0));
+  peShader.setUniform("u_black", blendBlack);
+  peShader.setUniform("u_distortion", distortion);
 
   rect(0, 0, width, height);
 

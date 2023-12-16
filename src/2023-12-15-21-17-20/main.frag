@@ -22,21 +22,19 @@ void main(void){
     // ------------------------------
 
     vec2 uv0=mod(uv*floor(20.*pow(u_vol,3.) + 1.0),1.);
-    // if(u_vol>.5&&sin(u_time+1.0)>0.){
-    //     uv0.y+=cos(uv0.x*10.0+u_time*20.0)*0.2;
-    // }
+
     vec4 smpColor0=texture2D(u_tex,uv0);
 
     // ------------------------------
 
     vec2 uv1=uv;
-    if(u_vol>.4){
+    if(u_vol>.4 && sin(u_time + 1.0)>.0){
         uv1=floor(uv1*100.)/100.;
     }
     if(u_vol>.5 && sin(u_time) > 0.0){
         uv1.y=.5;
     }
-    if(u_noise>.7){
+    if(u_noise>.6 &&sin(u_time+1.)>0.){
         uv1=mod(uv*floor(min(20.*pow(u_vol,3.), 1.0)),1.);
     }
     vec4 smpColor1=texture2D(u_tex3d,uv1);

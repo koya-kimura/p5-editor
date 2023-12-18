@@ -64,8 +64,8 @@ function draw() {
   }
   spmAvg /= spm.length;
 
-  blend0 = constrain(noise(frameCount / 300, blendSeed) * 1.3, 0.3, 0.9);
-  blend1 = constrain(noise(frameCount / 300, blendSeed+1) * 1.3, 0.3, 0.9);
+  blend0 = constrain(noise(frameCount / 300, blendSeed) * 1.3, 0.7, 1.2);
+  blend1 = constrain(noise(frameCount / 300, blendSeed+1) * 1.3, 0.7, 1.2);
 
   distortion = pow(spmAvg+0.3, 5.0) + 0.2;
 

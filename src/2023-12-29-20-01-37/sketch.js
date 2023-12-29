@@ -24,7 +24,7 @@ function draw() {
     spm[i] = map(spm[i], 0, 255, 0, 1);
   }
 
-  t += floor(pow(spm[20], 2)*6) + 1;
+  t += floor(pow(spm[20], 2)*16) + 1;
 
   pg.background(0);
 
@@ -52,11 +52,16 @@ function draw() {
     pg.rotateZ(rotationAngleZ * (periodIndexZ + normalZ));
 
     pg.strokeWeight(pow(spm[20], 3)*10);
-    pg.stroke(120);
-    pg.fill(255, 10);
+    if(spm[20] < 0.1){
+      pg.stroke(120);
+      pg.fill(255, 10);
+    } else {
+      pg.stroke(200, i*2 + 120, cos(t / 200 + i) * 50 + 100);
+      pg.fill(200, i*2 + 120, cos(t / 200 + i) * 50 + 100, pow(spm[20], 3)*150+50);
+    }
 
     const s = 20 + 150 * Easing.easeInOutBack(pow(sin(t / 600), 10));
-    pg.box(s*i + min(pow(spm[20]+0.2, 3), 1)*50);
+    pg.box(s*i + min(pow(spm[20]+0.2, 3), 1.2)*50);
 
     pg.pop();
   }

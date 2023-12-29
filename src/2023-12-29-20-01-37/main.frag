@@ -31,33 +31,37 @@ vec2 pol2xy(vec2 pol){
 void main(void) {
     vec2 uv = vTexCoord;
 
-    if(u_vol>.2 && sin(u_time) + cos(u_time+1.) > 0.){
+    if(u_vol>.2 && sin(u_time*5.) + cos(u_time+7.) > 0.){
         uv=abs(uv-.5)+.5;
     }
 
-    if(u_vol>.2 && sin(u_time+1.) + cos(u_time+2.)>0.){
-        float n = floor(abs(cos(u_time))*4.)+1.;
+    if(u_vol>.2 && sin(u_time*8.) + cos(u_time*11.)>.5){
+        float n = floor(pow(abs(cos(u_time)), 3.)*7.)+1.;
         uv = fract(uv*n);
     }
 
-    if(u_vol>.55 &&sin(u_time+3.)+cos(u_time+2.)>0.){
+    if(u_vol>.6 &&sin(u_time+9.)+cos(u_time+6.)>0.){
         uv.x = .5;
-        uv.y = floor(uv.y*100.)/100.;
+        uv.y = floor(uv.y*300.)/300.;
+    }
+
+    if(u_vol>.55&&sin(u_time+6.)+cos(u_time+7.)>0.){
+        uv.y += sin(uv.x*50. + u_time)*0.1;
     }
 
     vec4 col = texture2D(u_tex, uv);
 
-    if(u_vol>.5){
-        col.rgb = vec3(1.) - col.rgb;
+    col.rgb+=vec3(random(uv)-.5)*.05 + 0.05;
+
+    col.rgb+=vec3(step(.9997-pow(u_vol, 2.)*.001, random(vec2(uv.x, uv.y+u_time))));
+    col.rgb+=vec3(step(.9997-pow(u_vol,2.)*.001,random(vec2(uv.x, u_time)))*.3);
+    col.rgb+=vec3(step(.9997-pow(u_vol,2.)*.001,random(vec2(u_time, uv.y)))*.2);
+
+    if(u_vol>.15){
+        col.rgb=vec3(1.)-col.rgb;
     }
 
-    // if(u_vol>.2&&sin(u_time+2.)+cos(u_time+3.)>0.){
-    //     col.rgb=floor(col.rgb*10.)/10.;
-    // }
-
-    col.rgb=floor(col.rgb*(floor(u_vol*5.)+5.))/(floor(u_vol*5.)+5.);
-
-    col.rgb+=vec3(random(uv)-.5)*.05 + 0.05;
+    col.rgb=floor(col.rgb*(floor(u_vol*5.+3.)+8.))/(floor(u_vol*5.+3.)+8.);
 
     gl_FragColor = col;
 }

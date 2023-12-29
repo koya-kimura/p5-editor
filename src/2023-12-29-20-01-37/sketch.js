@@ -79,7 +79,7 @@ function keyPressed() {
     bgm.pause();
   } else {
     bgm.setVolume(0.15)
-    bgm.loop();
+    bgm.play();
   }
 }
 

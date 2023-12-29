@@ -57,7 +57,7 @@ void main(void) {
     col.rgb+=vec3(step(.9997-pow(u_vol,2.)*.001,random(vec2(uv.x, u_time)))*.3);
     col.rgb+=vec3(step(.9997-pow(u_vol,2.)*.001,random(vec2(u_time, uv.y)))*.2);
 
-    if(u_vol>.15){
+    if(u_vol>.55){
         col.rgb=vec3(1.)-col.rgb;
     }
 

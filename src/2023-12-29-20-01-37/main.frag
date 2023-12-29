@@ -32,7 +32,7 @@ void main(void) {
     vec2 uv = vTexCoord;
 
     if(u_vol>.2 && sin(u_time) + cos(u_time+1.) > 0.){
-        uv=abs(uv-.5);
+        uv=abs(uv-.5)+.5;
     }
 
     if(u_vol>.2 && sin(u_time+1.) + cos(u_time+2.)>0.){
@@ -47,17 +47,15 @@ void main(void) {
 
     vec4 col = texture2D(u_tex, uv);
 
-    if(u_vol>.2 && sin(u_time+2.) + cos(u_time+3.) >0.){
-        col.rgb = floor(col.rgb*10.)/10.;
-    }
-
     if(u_vol>.5){
         col.rgb = vec3(1.) - col.rgb;
     }
 
-    // if(u_vol>.55&&sin(u_time+3.)+cos(u_time+2.)>0.&&cos(uv.y*100.)<0.){
-    //     col.rgb=vec3(0.);
+    // if(u_vol>.2&&sin(u_time+2.)+cos(u_time+3.)>0.){
+    //     col.rgb=floor(col.rgb*10.)/10.;
     // }
+
+    col.rgb=floor(col.rgb*(floor(u_vol*5.)+5.))/(floor(u_vol*5.)+5.);
 
     col.rgb+=vec3(random(uv)-.5)*.05 + 0.05;
 

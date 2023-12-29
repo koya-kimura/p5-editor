@@ -6,8 +6,6 @@ let t = 0;
 let bgm;
 let fft;
 
-let cp;
-
 function preload(){
   theShader = loadShader("main.vert", "main.frag");
   bgm = loadSound("../../assets/sound/Particle_of_Lights_free_bgm_ver.mp3");
@@ -18,8 +16,6 @@ function setup() {
   pg = createGraphics(width, height, WEBGL);
 
   fft = fft = new p5.FFT(0.8, 32);
-
-  cp = random(colorPalletes).colors;
 }
 
 function draw() {
@@ -39,7 +35,7 @@ function draw() {
 
   pg.rotateY(t/periodY);
 
-  for(let i = 1; i < 7; i ++){
+  for(let i = 1; i < 15; i ++){
     pg.push();
 
     const periodX = period + 10 + i;
@@ -56,11 +52,11 @@ function draw() {
     pg.rotateZ(rotationAngleZ * (periodIndexZ + normalZ));
 
     pg.strokeWeight(pow(spm[20], 3)*10);
-    pg.stroke(cp[i%cp.length]);
+    pg.stroke(120);
     pg.fill(255, 10);
 
-    const s = 50 + 200 * Easing.easeInOutBack(pow(sin(t / 600), 10));
-    pg.box(s*i + min(pow(spm[20]+0.2, 3), 1)*150);
+    const s = 20 + 150 * Easing.easeInOutBack(pow(sin(t / 600), 10));
+    pg.box(s*i + min(pow(spm[20]+0.2, 3), 1)*50);
 
     pg.pop();
   }

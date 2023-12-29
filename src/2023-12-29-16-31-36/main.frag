@@ -45,10 +45,6 @@ void main(void) {
         uv = floor(uv*1000.)/1000.;
     }
 
-    // if(sin(u_time+4.) +cos(u_time+4.5) >.8){
-    //     uv= fract(uv*4.);
-    // }
-
     vec4 col =  texture2D(u_tex, uv);
 
     // 色反転 色ずらし

@@ -4,12 +4,18 @@ let balls = [];
 
 let n = 500;
 
+let bgm;
+let fft;
+
 function preload(){
   theShader = loadShader("main.vert", "main.frag");
+  bgm = loadSound("../../assets/sound/Love_This_Beat_free_BGM_ver.mp3");
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(windowWidth, windowWidth/2.35, WEBGL);
+
+  fft = fft = new p5.FFT(0.8, 32);
 
   pg = createGraphics(width, height);
 
@@ -27,11 +33,16 @@ function draw() {
     frameRate(60);
   }
 
+  let spm = fft.analyze();
+  for (let i in spm) {
+    spm[i] = map(spm[i], 0, 255, 0, 1);
+  }
+
   pg.background(0);
 
   pg.blendMode(ADD);
   for(let i in balls){
-    balls[i].move();
+    balls[i].move(spm[20] > 0.3);
     balls[i].display(pg);
   }
   pg.blendMode(BLEND);
@@ -54,13 +65,14 @@ class Ball {
     this.i = _i;
   }
 
-  move(){
-    if(this.p.x < this.s/2 || width - this.s / 2 < this.p.x){
+  move(_fr){
+    if(this.p.x < -this.s || width + this.s < this.p.x){
       this.v.x *= -1;
     }
-    if (this.p.y < this.s / 2 || height - this.s / 2 < this.p.y) {
+    if (this.p.y < -this.s || height + this.s < this.p.y) {
       this.v.y *= -1;
     }
+
     this.p.add(this.v);
     this.s = this.is + pow(sin(frameCount / 500), 19) * min(width, height) * 0.1;
   }
@@ -79,6 +91,19 @@ class Ball {
     pg.rotate(frameCount / 100 + this.i);
     pg.rect(0, 0, this.s / sqrt(2), this.s / sqrt(2));
     pg.pop();
+  }
+}
+
+function atan2(y, x) {
+  return x == 0 ? sign(y) * PI / 2 : atan(y, x);
+}
+
+function keyPressed() {
+  if (bgm.isPlaying()) {
+    bgm.pause();
+  } else {
+    bgm.setVolume(0.1)
+    bgm.loop();
   }
 }
 
@@ -103,3 +128,4 @@ const colorPalletes = [{
     colors: ["#F87523", "#FFC31B", "#E7DCC9", "#1DB7B9", "#126D68"],
   },
 ];
+

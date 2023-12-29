@@ -31,25 +31,33 @@ vec2 pol2xy(vec2 pol){
 void main(void) {
     vec2 uv = vTexCoord;
 
-    if(sin(u_time) > 0.){
+    if(u_vol>.2 && sin(u_time) + cos(u_time+1.) > 0.){
         uv=abs(uv-.5);
     }
 
-    if(sin(u_time+1.)>0.){
-        uv = fract(uv*5.);
+    if(u_vol>.2 && sin(u_time+1.) + cos(u_time+2.)>0.){
+        float n = floor(abs(cos(u_time))*4.)+1.;
+        uv = fract(uv*n);
+    }
+
+    if(u_vol>.55 &&sin(u_time+3.)+cos(u_time+2.)>0.){
+        uv.x = .5;
+        uv.y = floor(uv.y*100.)/100.;
     }
 
     vec4 col = texture2D(u_tex, uv);
 
-    if(sin(u_time+2.)>0.){
-        float gray = (col.r + col.g + col.b) / 3.;
-        gray = floor(pow(gray, 1.3)*10.)/10.;
-        col.rgb = vec3(gray);
+    if(u_vol>.2 && sin(u_time+2.) + cos(u_time+3.) >0.){
+        col.rgb = floor(col.rgb*10.)/10.;
     }
 
     if(u_vol>.5){
         col.rgb = vec3(1.) - col.rgb;
     }
+
+    // if(u_vol>.55&&sin(u_time+3.)+cos(u_time+2.)>0.&&cos(uv.y*100.)<0.){
+    //     col.rgb=vec3(0.);
+    // }
 
     col.rgb+=vec3(random(uv)-.5)*.05 + 0.05;
 

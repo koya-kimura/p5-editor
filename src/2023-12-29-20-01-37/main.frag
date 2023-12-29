@@ -3,6 +3,7 @@ precision mediump float;
 varying vec2 vTexCoord;
 
 uniform float u_time;
+uniform float u_vol;
 uniform sampler2D u_tex;
 
 float PI = 3.14159265358979;
@@ -30,13 +31,27 @@ vec2 pol2xy(vec2 pol){
 void main(void) {
     vec2 uv = vTexCoord;
 
-    // uv = abs(uv-.5);
+    if(sin(u_time) > 0.){
+        uv=abs(uv-.5);
+    }
 
-    uv = floor(uv*500.)/500.;
+    if(sin(u_time+1.)>0.){
+        uv = fract(uv*5.);
+    }
 
     vec4 col = texture2D(u_tex, uv);
 
-    col.rgb += vec3(random(uv))*.05;
+    if(sin(u_time+2.)>0.){
+        float gray = (col.r + col.g + col.b) / 3.;
+        gray = floor(pow(gray, 1.3)*10.)/10.;
+        col.rgb = vec3(gray);
+    }
+
+    if(u_vol>.5){
+        col.rgb = vec3(1.) - col.rgb;
+    }
+
+    col.rgb+=vec3(random(uv)-.5)*.05 + 0.05;
 
     gl_FragColor = col;
 }

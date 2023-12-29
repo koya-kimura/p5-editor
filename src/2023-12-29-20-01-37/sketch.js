@@ -1,53 +1,90 @@
 let theShader;
 let pg;
 
+let t = 0;
+
+let bgm;
+let fft;
+
+let cp;
+
 function preload(){
   theShader = loadShader("main.vert", "main.frag");
+  bgm = loadSound("../../assets/sound/Particle_of_Lights_free_bgm_ver.mp3");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   pg = createGraphics(width, height, WEBGL);
+
+  fft = fft = new p5.FFT(0.8, 32);
+
+  cp = random(colorPalletes).colors;
 }
 
 function draw() {
-  background(220);
+  let spm = fft.analyze();
+  for (let i in spm) {
+    spm[i] = map(spm[i], 0, 255, 0, 1);
+  }
 
-  const periodX = 30;
-  const periodIndexX = floor(frameCount / periodX);
-  const normalX = Easing.easeOutExpo(fract(frameCount / periodX));;
-  const rotationAngleX = PI / 2;
+  t += floor(pow(spm[20], 2)*6) + 1;
 
-  const periodY = 40;
-  const periodIndexY = floor(frameCount/periodY);
-  const normalY = Easing.easeOutExpo(fract(frameCount / periodY));;
-  const rotationAngleY = PI / 2;
+  pg.background(0);
 
-  const periodZ = 50;
-  const periodIndexZ = floor(frameCount / periodZ);
-  const normalZ = Easing.easeOutExpo(fract(frameCount / periodZ));;
-  const rotationAngleZ = PI / 2;
-
-  pg.background(30);
-  pg.stroke(255);
-  pg.fill(255, 10);
   pg.push();
-  pg.rotateX(rotationAngleX * (periodIndexX + normalX));
-  pg.rotateY(rotationAngleY * (periodIndexY + normalY));
-  pg.rotateZ(rotationAngleZ * (periodIndexZ + normalZ));
-  pg.box(100);
-  pg.box(300);
-  pg.box(500);
+
+  const period = 100;
+  const periodY = period+40;
+
+  pg.rotateY(t/periodY);
+
+  for(let i = 1; i < 7; i ++){
+    pg.push();
+
+    const periodX = period + 10 + i;
+    const periodIndexX = floor(t / periodX);
+    const normalX = Easing.easeOutExpo(fract(t / periodX));
+    const rotationAngleX = PI / 2;
+
+    const periodZ = period + 20 + i;
+    const periodIndexZ = floor(t / periodZ);
+    const normalZ = Easing.easeOutExpo(fract(t / periodZ));
+    const rotationAngleZ = PI / 2;
+
+    pg.rotateX(rotationAngleX * (periodIndexX + normalX));
+    pg.rotateZ(rotationAngleZ * (periodIndexZ + normalZ));
+
+    pg.strokeWeight(pow(spm[20], 3)*10);
+    pg.stroke(cp[i%cp.length]);
+    pg.fill(255, 10);
+
+    const s = 50 + 200 * Easing.easeInOutBack(pow(sin(t / 600), 10));
+    pg.box(s*i + min(pow(spm[20]+0.2, 3), 1)*150);
+
+    pg.pop();
+  }
+
   pg.pop();
 
   shader(theShader);
 
   theShader.setUniform("u_tex", pg);
+  theShader.setUniform("u_vol", spm[20]);
   theShader.setUniform("u_time", frameCount / 100);
 
   rect(0, 0, width, height);
 
   pg.remove();
+}
+
+function keyPressed() {
+  if (bgm.isPlaying()) {
+    bgm.pause();
+  } else {
+    bgm.setVolume(0.15)
+    bgm.loop();
+  }
 }
 
 class Easing {

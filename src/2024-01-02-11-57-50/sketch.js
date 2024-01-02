@@ -1,32 +1,76 @@
+let pg;
+
 const n = 1000;
 let p = [];
 let v = [];
 let s = [];
 let c = [];
+let si = 30;
+
+let ft;
+
+let msg = "HELLOWORLD"
+let msgArr = [...msg];
+
+function preload(){
+  ft = loadFont("../../assets/font/NotoSans_Condensed-BoldItalic.ttf");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  const fs = 80;
+  pg = createGraphics(width, height);
+  pg.background(0);
+  pg.fill(255);
+  pg.textFont(ft);
+  pg.textSize(fs);
+
+  let index = 0;
+  for(let y = -fs; y < height; y += fs){
+    for (let x = -fs; x < width + fs; x += fs) {
+      pg.text(msgArr[index%msgArr.length], x, y);
+      index ++;
+    }
+  }
+
   background(255);
 
   colorMode(HSB, 1.0, 1.0, 1.0, 1.0);
 
   noStroke();
 
+  let ci = random();
+
   for(let i = 0; i < n; i ++){
     p[i] = createVector(0, i*height/n);
     v[i] = createVector(1.0, noise(p[i].y/100)-0.5);
-    s[i] = 10;
-    c[i] = color(random(), 1.0, 1.0);
+    s[i] = si;
+    c[i] = color(random(ci, ci+0.3)%1.0, 1.0, 1.0);
   }
 }
 
 function draw() {
   for(let i in p){
-    fill(c[i]);
+    const pgc = pg.get(p[i].x, p[i].y);
+    const gray = (red(pgc)+green(pgc)+blue(pgc))/3;
+
+    if(gray > 0.1){
+      fill(c[i]);
+    } else {
+      fill(0);
+    }
+    // fill(gray);
     circle(p[i].x, p[i].y, s[i]);
 
-    v[i].add(createVector(0.0, (noise(p[i].y / 100) - 0.5)*0.001))
+    v[i].add(createVector(0.0, (noise(p[i].x / 100 , p[i].y / 100, frameCount / 10) - 0.5) * 0.1));
     p[i].add(v[i]);
+
+    if (sin(frameCount / 10) < 0.001) {
+      p[i].y = i * height / n;
+      v[i] = createVector(1.0, noise(p[i].y / 100) - 0.5);
+    }
+    s[i] = si + sin(frameCount / 10) * si;
   }
 }
 

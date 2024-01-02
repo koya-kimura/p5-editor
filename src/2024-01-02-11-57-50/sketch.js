@@ -1,5 +1,7 @@
 let pg;
 
+let period;
+
 const n = 1000;
 let p = [];
 let v = [];
@@ -7,23 +9,20 @@ let s = [];
 let c = [];
 let si = 30;
 
-let ft;
+let fs;
 
-let msg = "HELLOWORLD"
+let msg = "COLORPALETTE"
 let msgArr = [...msg];
-
-function preload(){
-  ft = loadFont("../../assets/font/NotoSans_Condensed-BoldItalic.ttf");
-}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  const fs = 80;
+  period = floor(random()*10)*20;
+  fs = random(10, 400);
+
   pg = createGraphics(width, height);
   pg.background(0);
   pg.fill(255);
-  pg.textFont(ft);
   pg.textSize(fs);
 
   let index = 0;
@@ -41,12 +40,16 @@ function setup() {
   noStroke();
 
   let ci = random();
+  let cp = [];
+  cp[0] = random();
+  cp[1] = random();
+  cp[2] = random();
 
   for(let i = 0; i < n; i ++){
     p[i] = createVector(0, i*height/n);
     v[i] = createVector(1.0, noise(p[i].y/100)-0.5);
     s[i] = si;
-    c[i] = color(random(ci, ci+0.3)%1.0, 1.0, 1.0);
+    c[i] = color(random(cp), 1.0, 1.0);
   }
 }
 
@@ -60,7 +63,6 @@ function draw() {
     } else {
       fill(0);
     }
-    // fill(gray);
     circle(p[i].x, p[i].y, s[i]);
 
     v[i].add(createVector(0.0, (noise(p[i].x / 100 , p[i].y / 100, frameCount / 10) - 0.5) * 0.1));
@@ -70,7 +72,7 @@ function draw() {
       p[i].y = i * height / n;
       v[i] = createVector(1.0, noise(p[i].y / 100) - 0.5);
     }
-    s[i] = si + sin(frameCount / 10) * si;
+    s[i] = si + sin(frameCount / period) * si + 2;
   }
 }
 

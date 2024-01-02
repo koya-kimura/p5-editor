@@ -1,42 +1,32 @@
+const n = 1000;
+let p = [];
+let v = [];
+let s = [];
+let c = [];
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(0);
+  background(255);
 
-  blendMode(ADD)
+  colorMode(HSB, 1.0, 1.0, 1.0, 1.0);
 
-  let cp = random(colorPalletes).colors;
-  let r = 100;
-  let p0 = createVector(width/2, height/2);
-  for(let i = 0; i < 200000; i ++){
-    let p1 = createVector(p0.x + cos(noise(i / 10000, 0)*TAU) * r, p0.y + sin(noise(i / 10000, 1)*TAU) * r);
-    let d = dist(p0.x, p0.y, p1.x, p1.y);
+  noStroke();
 
-    strokeWeight(3 * d / (r * sqrt(2)));
-
-    // let c = cp[getSign(p0.x) + 1 + getSign(p0.y) + 1];
-    // stroke(red(c), green(c), blue(c), 100);
-    stroke(255, 100);
-    point(p0.x, p0.y);
-
-    stroke(255*d/(r*sqrt(2)), 1);
-    line(p0.x, p0.y, p1.x, p1.y);
-
-    p0 = p1;
-
-    if(abs(p0.x-width/2) > width/2){
-      p0.x = width/2;
-    }
-    if (abs(p0.y - height / 2) > height / 2) {
-      p0.y = height/2;
-    }
+  for(let i = 0; i < n; i ++){
+    p[i] = createVector(0, i*height/n);
+    v[i] = createVector(1.0, noise(p[i].y/100)-0.5);
+    s[i] = 10;
+    c[i] = color(random(), 1.0, 1.0);
   }
 }
 
-function getSign(val) {
-  if (val >= 0) {
-    return 1;
-  } else {
-    return -1;
+function draw() {
+  for(let i in p){
+    fill(c[i]);
+    circle(p[i].x, p[i].y, s[i]);
+
+    v[i].add(createVector(0.0, (noise(p[i].y / 100) - 0.5)*0.001))
+    p[i].add(v[i]);
   }
 }
 

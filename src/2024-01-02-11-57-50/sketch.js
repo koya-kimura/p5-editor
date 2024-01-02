@@ -9,20 +9,26 @@ let s = [];
 let c = [];
 let si = 30;
 
+let ft;
 let fs;
 
 let msg = "COLORPALETTE"
 let msgArr = [...msg];
 
+function preload(){
+  ft = loadFont("../../assets/font/NotoSans_Condensed-BoldItalic.ttf");
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   period = floor(random()*10)*20;
-  fs = random(10, 400);
+  fs = random(10, 700);
 
   pg = createGraphics(width, height);
   pg.background(0);
   pg.fill(255);
+  pg.textFont(ft);
   pg.textSize(fs);
 
   let index = 0;

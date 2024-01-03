@@ -7,6 +7,7 @@ content_file_path="src/${now}"
 
 cp -R templete/${userInput} src/${now}
 code -r src/$now/sketch.js
+code -r src/$now/index.html
 
 echo -e "\n - [${now}](../${content_file_path})" >> "${md_file_path}"
 

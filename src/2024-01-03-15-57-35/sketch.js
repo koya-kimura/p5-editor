@@ -40,6 +40,8 @@ function preload() {
   view_img_arr[13] = loadImage("../../assets/image/turtle.jpg");
   view_img_arr[14] = loadImage("../../assets/image/winter-woman.png");
   view_img_arr[15] = loadImage("../../assets/image/peaches.jpg");
+  view_img_arr[16] = loadImage("../../assets/image/moon.jpg");
+  view_img_arr[17] = loadImage("../../assets/image/sunset-cat.jpg");
 }
 
 function setup() {
@@ -50,7 +52,7 @@ function setup() {
   img_arr_resize(img_arr, width, 0);
   img_arr_resize(view_img_arr, width, 0);
 
-  let pg_step = 30;
+  let pg_step = 40;
 
   for(let i in img_arr){
     img_color_arr[i] = pick_color_from_image(img_arr[i], width / 10, 5);
@@ -69,7 +71,7 @@ function setup() {
     }
   }
 
-  pg_step = 10;
+  pg_step = 5;
 
   for (let i in pg_arr) {
     pg_color_arr[i] = pick_color_from_image(pg_arr[i], width / 10, 5);
@@ -85,20 +87,20 @@ function setup() {
     }
   }
 
-  // for (let x = 0; x < pg.width; x += pg_step) {
-  //   for (let y = 0; y < pg.width; y += pg_step) {
-  //     if(random()<0.1){
-  //       let pg_c = pg.get(x, y);
-  //       let pg_near_c = color_near_distanse(pg_c, pg_color_arr);
-  //       let pg_near_c_index = pg_color_arr.indexOf(pg_near_c);
-  //       let scl = random([1, 2, 4, 8]);
-  //       image(pg_arr[pg_near_c_index], x, y, pg_step*scl, pg_step*scl);
-  //     }
-  //   }
-  // }
+  for (let x = 0; x < pg.width; x += pg_step) {
+    for (let y = 0; y < pg.width; y += pg_step) {
+      if(random()<0.1){
+        let pg_c = pg.get(x, y);
+        let pg_near_c = color_near_distanse(pg_c, pg_color_arr);
+        let pg_near_c_index = pg_color_arr.indexOf(pg_near_c);
+        let scl = random([1, 8]);
+        image(pg_arr[pg_near_c_index], x, y, pg_step*scl, pg_step*scl);
+      }
+    }
+  }
 
-  // tint(255, 100);
-  // image(pg, 0, 0);
+  tint(255, 100);
+  image(pg, 0, 0);
 }
 
 //--------------- create function ---------------

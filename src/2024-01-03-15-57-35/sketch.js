@@ -5,7 +5,7 @@ let view_img_arr = [];
 let img_color_arr = [];
 let pg_color_arr = [];
 
-const main_img_path = "../../assets/image/profile/worry.png"
+const main_img_path = "../../assets/image/dragon-paint.jpg"
 
 
 function preload() {
@@ -99,7 +99,7 @@ function setup() {
     }
   }
 
-  tint(255, 100);
+  tint(255, 90);
   image(pg, 0, 0);
 }
 

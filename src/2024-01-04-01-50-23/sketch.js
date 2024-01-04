@@ -1,12 +1,75 @@
+let bgm;
+let fft;
+
+const particleNum = 1000;
+let particles = [];
+
+function preload(){
+  bgm = loadSound("../../assets/sound/Kikai-Jikake-no-Kokoro_Long_FreeVer.mp3")
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  
+  fft = fft = new p5.FFT(0.8, 32);
+
+  for(let i = 0; i < particleNum; i ++){
+    particles.push(new Particle());
+  }
 }
 
 function draw() {
-  background(220);
+  let spm = fft.analyze();
+  for (let i in spm) {
+    spm[i] = map(spm[i], 0, 255, 0, 1);
+  }
+
+
+  background(255 - pow(spm[25], 3) * 100, 255 - pow(spm[25], 3) * 50, 230+sin(frameCount/200)*100, 100);
+
+  for(let i in spm){
+    fill(255, pow(spm[10], 2)*255);
+    stroke(200, 230, 255);
+    circle(width/2, height/2, spm[i]*min(width, height)*0.8);
+  }
+
+  for(let i in particles){
+    particles[i].move();
+    particles[i].display(spm[20]);
+  }
+}
+
+class Particle {
+  constructor(){
+    this.p = createVector(random(width), height + 100);
+    this.px = this.p.x;
+    this.r = random(100);
+    this.v = createVector(0, -random(1, 5));
+    this.s = random(10);
+  }
+
+  move(){
+    this.p.add(this.v);
+    this.p.x = this.px + this.r * sin(frameCount/100);
+    if(this.p.y < -100){
+      this.p.y = height + 100;
+    }
+  }
+
+  display(_scl){
+    noStroke();
+    fill(240, 245, 255);
+    circle(this.p.x, this.p.y, this.s+pow(_scl, 2)*this.s);
+  }
+}
+
+function mousePressed() {
+  if (bgm.isPlaying()) {
+    bgm.pause();
+  } else {
+    bgm.setVolume(0.3)
+    bgm.loop();
+  }
 }
 
 class Easing {

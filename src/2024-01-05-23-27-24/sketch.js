@@ -1,19 +1,71 @@
 let lastMouseTime;
 let inactiveTimeThreshold = 3000; // 3 seconds
+let capture_pg;
+let ft;
+
+function preload(){
+  ft = loadFont("../../assets/font/DSEG14ClassicMini-BoldItalic.ttf");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   lastMouseTime = millis();
+
+  capture = createCapture(VIDEO);
+  capture.hide();
+
+  capture_pg = createGraphics(width, height);
 }
 
 function draw() {
-  if (checkInactive()){
-    background(0, 10);
-    circle(width / 2, height / 2, width * abs(sin(frameCount / 100)));
-  } else {
+    capture_pg.image(capture, 0, 0, width, height);
+    
+    // 現在の時刻を取得
+    let now = new Date();
+
+    // 時、分、秒を取得
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+
+    // ゼロパディング（1桁の場合、前に0を追加）
+    hours = padNumber(hours);
+    minutes = padNumber(minutes);
+    seconds = padNumber(seconds);
+
+    // 時刻を表示
+    // capture_pg.textFont(ft);
+    // capture_pg.textSize(300);
+    // capture_pg.fill(255);
+    // capture_pg.textAlign(CENTER);
+    // capture_pg.text(`${hours}:${minutes}:${seconds}`, width/2 - 70, height - 100);
+
     background(255);
-    rect(100, 100, 100);
-  }
+
+    const grid = 15;
+    for (let x = 0; x < width; x += grid) {
+      for (let y = 0; y < height; y += grid) {
+        const c = capture_pg.get(x + grid / 2, y + grid / 2);
+        const gray = (red(c) + green(c) + blue(c)) / 3;
+        const maxN = 10;
+        const n = floor(pow(map(gray, 0, 255, 0, 1), 3) * (maxN - 1) + 1);
+        if (checkInactive()) {
+        for(let i = 0; i < n; i ++){
+          const _x = x + grid * i/n;
+          push();
+          translate(_x, y+grid/2);
+          rotate(frameCount/100 + x/1000 + y/1000);
+          line(0, -grid/2, 0, grid/2);
+          pop();
+        }
+      } else {
+        const d = dist(x, y, mouseX, mouseY);
+        text(n, x, y);
+      }
+      }
+    }
+
+    // image(capture_pg, 0, 0)
 }
 
 function checkInactive() {
@@ -29,6 +81,9 @@ function mouseMoved() {
   lastMouseTime = millis();
 }
 
+function padNumber(number) {
+  return (number < 10) ? '0' + number : number;
+}
 
 class Easing {
   static easeInSine(x) {
@@ -138,8 +193,7 @@ class Easing {
   }
 }
 
-const colorPalletes = [
-  {
+const colorPalletes = [{
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

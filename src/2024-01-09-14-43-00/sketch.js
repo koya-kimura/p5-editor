@@ -1,36 +1,34 @@
-let ft;
-let cp;
+let theShader;
 let capture_pg;
+let capture;
+let img;
+
+function preload(){
+  theShader = loadShader("main.vert", "main.frag");
+  img = loadImage("../../assets/image/night-shibuya.png")
+}
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  img.resize(0, height);
+  createCanvas(img.width, img.height, WEBGL);
 
   capture = createCapture(VIDEO);
   capture.hide();
 
   capture_pg = createGraphics(width, height);
-
-  cp = random(colorPalletes).colors;
-  cp = shuffle(cp);
 }
 
 function draw() {
   capture_pg.image(capture, 0, 0, width, height);
 
-  background(0);
+  background(220);
 
-  const grid = 12;
-  for (let x = 0; x < width; x += grid) {
-    for (let y = 0; y < height; y += grid) {
-      const c = capture_pg.get(x + grid / 2, y + grid / 2);
-      const gray = (red(c) + green(c) + blue(c)) / 3;
-      const i = String.fromCharCode(gray);
-      const co = cp[floor((gray/256)*cp.length)];
-      fill(co);
-      textSize(grid);
-      text(i, x, y);
-    }
-  }
+  shader(theShader);
+
+  theShader.setUniform("u_tex", img);
+  theShader.setUniform("u_time", frameCount / 100);
+
+  rect(0, 0, width, height);
 }
 
 class Easing {

@@ -146,4 +146,8 @@ const colorPalletes = [{
     name: "DeepEmeraldGold",
     colors: ["#F87523", "#FFC31B", "#E7DCC9", "#1DB7B9", "#126D68"],
   },
+  {
+    name: "GreenPink",
+    colors: ["#01B999", "#FAB3B3", "#DC958F", "#A1D8CE", "#F1FAF7"],
+  }
 ];

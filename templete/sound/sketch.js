@@ -139,8 +139,7 @@ class Easing {
   }
 }
 
-const colorPalletes = [
-  {
+const colorPalletes = [{
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },
@@ -160,4 +159,8 @@ const colorPalletes = [
     name: "DeepEmeraldGold",
     colors: ["#F87523", "#FFC31B", "#E7DCC9", "#1DB7B9", "#126D68"],
   },
+  {
+    name: "GreenPink",
+    colors: ["#01B999", "#FAB3B3", "#DC958F", "#A1D8CE", "#F1FAF7"],
+  }
 ];

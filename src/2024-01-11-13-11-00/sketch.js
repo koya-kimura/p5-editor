@@ -89,5 +89,13 @@ const colorPalletes = [{
   {
     name: "GreenPink",
     colors: ["#01B999", "#FAB3B3", "#DC958F", "#A1D8CE", "#F1FAF7"],
-  }
+  },
+  {
+    name: "NatureTranquility",
+    colors: ["#106A6B", "#07374B", "#CAB381", "#E9E0CE"],
+  },
+  {
+    name: "VibrantHarmony",
+    colors: ["#F15946", "#5681CB", "#FAAA2D", "#296647", "#453945"],
+  },
 ];

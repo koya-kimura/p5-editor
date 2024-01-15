@@ -10,21 +10,34 @@ let world;
 let boxes = [];
 let ground;
 
+let img;
+
+const grid = 20;
+
+function preload(){
+  img = loadImage("../../assets/image/bandana-woman.jpg")
+}
+
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(600, 600);
+  background(0);
+
+  img.resize(0, height);
 
   engine = Engine.create();
   world = engine.world;
-  ground = new Boundary(200, height, width, 100);
+  ground = new Boundary(300, height+100, width, 200);
   Composite.add(world, ground);
-}
 
-function mousePressed() {
-  boxes.push(new Box(mouseX, mouseY, random(10, 40), random(10, 40)));
+  for(let y = grid/2; y < height; y += grid){
+    for (let x = grid / 2; x < width; x += grid) {
+      const c = img.get(x, y);
+      boxes.push(new Box(x, -height+y, grid, grid * random(0.99, 1.01), c));
+    }
+  }
 }
 
 function draw() {
-  background(51);
 
   Engine.update(engine);
   for (let i = 0; i < boxes.length; i++) {
@@ -34,11 +47,12 @@ function draw() {
 }
 
 class Box {
-  constructor(x, y, w, h) {
+  constructor(x, y, w, h, c) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+    this.c = c;
     let options = {
       friction: 0.3,
       restitution: 0.6
@@ -55,9 +69,8 @@ class Box {
     translate(pos.x, pos.y);
     rotate(angle);
     rectMode(CENTER);
-    strokeWeight(1);
-    stroke(255)
-    fill(127);
+    fill(this.c);
+    noStroke();
     rect(0, 0, this.w, this.h);
     pop();
   }

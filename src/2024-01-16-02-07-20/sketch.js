@@ -4,6 +4,7 @@ const n = 10000;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(0);
 
   cp = random(colorPalletes).colors;
   for (let i = 0; i < n; i++) {
@@ -12,7 +13,7 @@ function setup() {
 }
 
 function draw() {
-  background(0, 10);
+  background(0, 5);
 
   for (let i in balls) {
     balls[i].move();
@@ -31,7 +32,7 @@ class Ball {
   move() {
     this.r += this.vr;
     this.th += sin(frameCount / 100) / 100;
-    if (frameCount%100 < 90 && this.r < min(width, height) * 0.35001 && (this.r < 0 || min(width, height) * 0.35 < this.r)) {
+    if ((this.r < 0 || max(width, height) * 0.6 < this.r)) {
       this.vr *= -1;
     }
   }
@@ -41,7 +42,7 @@ class Ball {
     fill(red(this.c), green(this.c), blue(this.c), 100);
 
     const p = createVector(width / 2 + this.r * cos(this.th), height / 2 + this.r * sin(this.th));
-    const s = pow(map(this.r, 0, min(width, height) * 0.35, 0, 1), 2) * 10;
+    const s = pow(map(this.r, 0, min(width, height) * 0.6, 0, 1), 3) * 50 + 1;
     circle(p.x, p.y, s);
   }
 }
@@ -186,4 +187,8 @@ const colorPalletes = [{
     name: "VibrantHarmony",
     colors: ["#F15946", "#5681CB", "#FAAA2D", "#296647", "#453945"],
   },
+  {
+    name: "Serenity Bliss",
+    colors: ["#FFB4B8", "#EF4B28", "#0A563A", "#FFBC54", "#ECE9E0"],
+  }
 ];

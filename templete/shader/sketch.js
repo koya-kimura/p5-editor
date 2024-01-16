@@ -158,4 +158,8 @@ const colorPalletes = [{
     name: "VibrantHarmony",
     colors: ["#F15946", "#5681CB", "#FAAA2D", "#296647", "#453945"],
   },
+  {
+    name: "Serenity Bliss",
+    colors: ["#FFB4B8", "#EF4B28", "#0A563A", "#FFBC54", "#ECE9E0"],
+  }
 ];

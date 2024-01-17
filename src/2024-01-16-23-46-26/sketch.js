@@ -22,7 +22,7 @@ function drawPreNgon(n, x, y, r, pre, cp) {
   for (let i = 0; i < pre; i++) {
     const _r = pow(sqrt(3) / 2, i) * r;
     stroke(cp[i % cp.length]);
-    drawNgon(n, x, y, _r, floor(random(n)));
+    drawNgon(n, x, y, _r, floor(random(1, n)));
   }
 }
 

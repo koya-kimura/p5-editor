@@ -4,10 +4,11 @@ let cp;
 
 const API_KEY = '***';
 const URL = "https://api.openai.com/v1/chat/completions";
-let chr = "こんにちは";
-let msg = "loading";
-let pmsg = msg;
-let msgArr;
+let chr = "恋";
+let msg = "恋とは、人間の最も深い感情の一つであり、心に奥深く刻まれる美しい冒険の旅です。恋愛は時に幻想的で、相手との出会いがまるで星座が交わるような魔法の瞬間となります。その瞬間、心の奥底で何かが揺れ動き、新しい感情の扉が開かれるのです。恋は交響曲のようなもので、 その旋律に身を委ねることで、 空に舞う蝶のように軽やかに舞い上がります。 相手の笑顔は日常を色鮮やかな絵画のように彩り、 心の中には喜びの花が咲き誇ります。 しかし、 恋には時折嵐も訪れます。 心の奥深くには不安や痛みが潜むこともあり、 相手とのすれ違いや誤解が静かな夜に雷鳴のように鳴り響くこともあります。そんな時こそ、 成熟と理解の芽が花開く瞬間。 失恋はまるで秋の風が心を抜けるようにやってきます。 切なさが胸を包み込み、 涙がしずくとなって心の底に滴ります。 しかし、 そこには新たな始まりが潜んでいます。 失ったものよりも、 得るものが多いことに気づく瞬間です。恋愛は個々の人生において大きな役割を果たし、 その深い感情は人を成長させます。 相手との絆が深まり、 お互いを理解し合うことで、 人間関係はより豊かなものとなります。 恋は喜びと切なさ、 成熟と新たな始まりを織り交ぜながら、 人生に彩りを添える不可欠な要素と言えるでしょう。 ";
+let msgEn = "hello"
+let msgArr = [...msg];
+let msgEnArr = [...msgEn];
 
 function preload() {
   ft = loadFont("../../assets/font/Harenosora.otf");
@@ -32,8 +33,6 @@ function setup() {
 function draw() {
   const ts = pg.width * 0.8;
 
-  msgArr = [...msg];
-
   pg.background(0);
   let grid = 30;
   let index = 0;
@@ -42,7 +41,7 @@ function draw() {
       pg.fill(random(cp));
       pg.textFont(ft);
       pg.textSize(grid);
-      pg.text(msgArr[index % msgArr.length], x, y);
+      pg.text(msgEnArr[index % msgEnArr.length], x, y);
 
       index++;
     }
@@ -66,41 +65,11 @@ function draw() {
 
       index++;
     }
-
-    if (msg != pmsg) {
-      noLoop();
-    }
-    pmsg = msg;
   }
 
   image(pg, width / 2, height / 2);
 
   pg.remove();
-}
-
-async function reply(t) {
-  let text = t;
-  try {
-    const response = await axios.post(
-      URL, {
-        "model": "gpt-3.5-turbo",
-        "messages": [{
-          "role": "user",
-          "content": text,
-        }, ],
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      }
-    );
-    let chatgpt_response = response.data.choices[0].message.content;
-    return chatgpt_response;
-  } catch (error) {
-    console.log(error);
-    throw error; // エラーが発生した場合は呼び出し元にエラーを伝える
-  }
 }
 
 class Easing {

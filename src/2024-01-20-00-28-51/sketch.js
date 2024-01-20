@@ -1,10 +1,12 @@
 let pg;
 let ft;
+let cp;
 
-const API_KEY = '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';
+const API_KEY = '***';
 const URL = "https://api.openai.com/v1/chat/completions";
 let chr = "こんにちは";
-let msg;
+let msg = "loading";
+let pmsg = msg;
 let msgArr;
 
 function preload() {
@@ -12,25 +14,25 @@ function preload() {
 
   reply(chr).then(response => {
     msg = String(response);
-    console.log(msg);
   }).catch(error => {
     console.error(error);
   });
 }
 
-
-function setup() {
+function setup(){
   const w = min(windowWidth, windowHeight);
   createCanvas(w, w);
 
-  const cp = random(colorPalletes).colors;
+  cp = random(colorPalletes).colors;
   imageMode(CENTER);
 
   pg = createGraphics(w, w);
+}
 
+function draw() {
   const ts = pg.width * 0.8;
 
-  msgArr = [..."HELLO"];
+  msgArr = [...msg];
 
   pg.background(0);
   let grid = 30;
@@ -64,6 +66,11 @@ function setup() {
 
       index++;
     }
+
+    if(msg != pmsg){
+      noLoop();
+    }
+    pmsg = msg;
   }
 
   image(pg, width / 2, height / 2);

@@ -1,10 +1,68 @@
+const chrArr = ["LINE", "線", "선", "线", "línea"];
+let bubble = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(250);
+
+  const pg = createGraphics(width, height);
+  pg.background(0);
+  pg.fill(255);
+  pg.textAlign(CENTER);
+
+  const chr = random(chrArr);
+  const ts = min(width, height) * 0.8;
+  pg.textSize(ts);
+  pg.text(chr, width / 2, height / 2 + ts / 3);
+
+  const cp = random(colorPalletes).colors;
+  const grid = 10;
+  for (let x = grid / 2; x < width; x += grid) {
+    for (let y = grid / 2; y < height; y += grid) {
+      const c = pg.get(x, y);
+      const g = (red(c) + green(c) + blue(c)) / 3;
+      if (g > 50) {
+        bubble.push(new Bubble(x, y, random(cp), 0));
+      }
+    }
+  }
+
+  for (let i = 0; i < 2000; i++) {
+    bubble.push(new Bubble(random(width), random(height), color(230, 230, 230), 1));
+  }
+
+  for (let i in bubble) {
+    for (let j in bubble) {
+      let d = dist(bubble[i].p.x, bubble[i].p.y, bubble[j].p.x, bubble[j].p.y);
+      if (d < 50 && bubble[i].t == bubble[j].t) {
+        stroke(bubble[i].c);
+        line(bubble[i].p.x, bubble[i].p.y, bubble[j].p.x, bubble[j].p.y);
+      }
+    }
+  }
 }
 
 function draw() {
-  background(220);
+  // background(0, 1);
+}
+
+class Bubble {
+  constructor(x, y, c, t) {
+    this.p = createVector(x, y);
+    this.v = createVector(random(-3, 3) * t, random(-3, 3) * t);
+    this.c = c;
+    this.t = t;
+  }
+
+  move() {
+    this.p.add(this.v);
+    if (this.p.x < 0 || width < this.p.x) {
+      this.v.x *= -1;
+    }
+    if (this.p.y < 0 || height < this.p.y) {
+      this.v.y *= -1;
+    }
+  }
 }
 
 class Easing {
@@ -115,8 +173,7 @@ class Easing {
   }
 }
 
-const colorPalletes = [
-  {
+const colorPalletes = [{
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

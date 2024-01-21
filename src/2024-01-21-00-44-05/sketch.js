@@ -1,12 +1,13 @@
 let scribble = new Scribble();
 let bubble = [];
+let cp;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  const cp = random(colorPalletes).colors;
+  cp = random(colorPalletes).colors;
 
-  for(let i = 0; i < 100; i ++){
+  for(let i = 0; i < 20; i ++){
     bubble.push(new ScRectBubble(cp));
   }
 }
@@ -14,10 +15,27 @@ function setup() {
 function draw() {
   background(220);
 
-  for(let i in bubble){
+  for (let i in bubble) {
     bubble[i].move();
     bubble[i].display();
   }
+
+  const w = min(width, height);
+  // 腕
+  scRect(width / 2 - width * 0.215, height / 2 + height * 0.35, w * 0.2, w * 0.05, cp[1], cp[3]);
+  scRect(width / 2 + width * 0.215, height / 2 + height * 0.35, w * 0.2, w * 0.05, cp[1], cp[3]);
+  // 足
+  scRect(width / 2 - width * 0.15, height / 2 + height * 0.475, w * 0.2, w * 0.05, cp[1], cp[3]);
+  scRect(width / 2 + width * 0.15, height / 2 + height * 0.475, w * 0.2, w * 0.05, cp[1], cp[3]);
+  // 胴
+  scRect(width / 2, height / 2 + height * 0.35, w * 0.6, w * 0.2, cp[0], cp[1]);
+  // 顔
+  scRect(width / 2, height / 2 - height * 0.1, w * 0.7, w * 0.7, cp[0], cp[1]);
+  // 目
+  scRect(width / 2 - width * 0.1, height / 2 - height * 0.2, w * 0.2, w * 0.2, cp[1], cp[2]);
+  scRect(width / 2 + width * 0.1, height / 2 - height * 0.2, w * 0.2, w * 0.2, cp[1], cp[2]);
+  // 口
+  scRect(width / 2, height / 2 + height * 0.1, w * 0.4, w * 0.2, cp[2], cp[3]);
 }
 
 class ScRectBubble {

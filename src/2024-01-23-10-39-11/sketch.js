@@ -2,21 +2,31 @@ const n = 64;
 
 let pg;
 let w;
+let cp;
+
+let img;
+
+function preload(){
+  img = loadImage("../../assets/image/night-car.png")
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   w = min(width, height) * 0.8;
+  w = floor(w/n)*n;
   pg = createGraphics(w, w);
+  cp = random(colorPalletes).colors;
+
+  frameRate(10);
 }
 
 function draw() {
   background(220);
 
-  pg.background(255, 255, 0);
-  pg.fill(255, 0, 0);
-  pg.noStroke();
-  pg.circle(w / 2, w / 2, 400);
+  pg.background(255);
+  pg.fill(random(255), random(255), random(255));
+  pg.circle(random(w), random(w), random(w));
 
   const grid = w / n;
   const sx = (width - w) / 2;
@@ -24,6 +34,7 @@ function draw() {
   for (let x = 0; x < w; x += grid) {
     for (let y = 0; y < w; y += grid) {
       const c = pg.get(x + grid / 2, y + grid / 2);
+      const g = (red(c), green(c), blue(c))/3/255;
       fill(c);
       noStroke();
       rect(sx + x, sy + y, grid, grid);

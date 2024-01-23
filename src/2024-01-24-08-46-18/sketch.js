@@ -1,94 +1,10 @@
-const n = 64;
-
-let pg;
-let w;
-let cp;
-
-let img;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  w = min(width, height) * 0.8;
-  w = floor(w / n) * n;
-  pg = createGraphics(w, w);
-  cp = random(colorPalletes).colors;
-  cp = shuffle(cp);
-
-  frameRate(10);
 }
 
 function draw() {
-  background(245);
-
-  pg.background(255, 100);
-  pg.rectMode(CENTER);
-
-  pg.fill(60);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.8, w, w * 0.4);
-
-  pg.fill(200);
-  pg.noStroke();
-  pg.rect(w * 0.5, w * 0.6, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w * 0.7, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w * 0.8, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w * 0.9, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-
-  pg.fill(cp[0]);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.3, w, w * 0.6);
-
-  pg.fill(230);
-  pg.noStroke();
-  pg.circle(w * 0.15, w * 0.15, w * 0.2)
-
-  pg.fill(50);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.3, w * 0.7, w * 0.25, w / 20, w / 20);
-
-  pg.fill(200);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.3, w * 0.65, w * 0.2, w / 20, w / 20);
-
-  pg.fill(cp[1]);
-  pg.stroke(100);
-  pg.strokeWeight(10);
-  pg.circle(w * 0.3, w * 0.3, w * 0.15);
-
-  pg.fill(cp[2]);
-  pg.stroke(100);
-  pg.strokeWeight(10);
-  pg.circle(w * 0.5, w * 0.3, w * 0.15);
-
-  pg.fill(cp[3]);
-  pg.stroke(100);
-  pg.strokeWeight(10);
-  pg.circle(w * 0.7, w * 0.3, w * 0.15);
-
-  for (let i = 0; i < 10000; i++) {
-    stroke(random(255));
-    strokeWeight(random(2));
-    point(random(width), random(height));
-  }
-
-  const grid = w / n;
-  const sx = (width - w) / 2;
-  const sy = (height - w) / 2;
-  for (let x = 0; x < w; x += grid) {
-    for (let y = 0; y < w; y += grid) {
-      const c = pg.get(x + grid / 2, y + grid / 2);
-      const g = (red(c), green(c), blue(c)) / 3 / 255;
-      fill(c);
-      noStroke();
-      rect(sx + x, sy + y, grid, grid);
-    }
-  }
-
-  pg.remove();
-
-  noLoop();
+  background(220);
 }
 
 class Easing {
@@ -199,7 +115,8 @@ class Easing {
   }
 }
 
-const colorPalletes = [{
+const colorPalletes = [
+  {
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

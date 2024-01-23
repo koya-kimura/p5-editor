@@ -1,94 +1,68 @@
-const n = 64;
-
-let pg;
-let w;
-let cp;
-
-let img;
+const grid = 50;
+let wn;
+let hn;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  w = min(width, height) * 0.8;
-  w = floor(w / n) * n;
-  pg = createGraphics(w, w);
-  cp = random(colorPalletes).colors;
-  cp = shuffle(cp);
+  wn = floor(width / 2 / grid);
+  hn = floor(height / 2 / grid);
 
-  frameRate(10);
+  frameRate(1);
 }
 
 function draw() {
   background(245);
 
-  pg.background(255, 100);
-  pg.rectMode(CENTER);
+  strokeWeight(1);
+  stroke(200);
+  gridLine(grid);
 
-  pg.fill(60);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.8, w, w * 0.4);
+  translate(width / 2, height / 2);
 
-  pg.fill(200);
-  pg.noStroke();
-  pg.rect(w * 0.5, w * 0.6, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w * 0.7, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w * 0.8, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w * 0.9, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-  pg.rect(w * 0.5, w, w * 0.5, w * 0.05, w * 0.1, w * 0.1);
-
-  pg.fill(cp[0]);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.3, w, w * 0.6);
-
-  pg.fill(230);
-  pg.noStroke();
-  pg.circle(w * 0.15, w * 0.15, w * 0.2)
-
-  pg.fill(50);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.3, w * 0.7, w * 0.25, w / 20, w / 20);
-
-  pg.fill(200);
-  pg.noStroke();
-  pg.rect(w / 2, w * 0.3, w * 0.65, w * 0.2, w / 20, w / 20);
-
-  pg.fill(cp[1]);
-  pg.stroke(100);
-  pg.strokeWeight(10);
-  pg.circle(w * 0.3, w * 0.3, w * 0.15);
-
-  pg.fill(cp[2]);
-  pg.stroke(100);
-  pg.strokeWeight(10);
-  pg.circle(w * 0.5, w * 0.3, w * 0.15);
-
-  pg.fill(cp[3]);
-  pg.stroke(100);
-  pg.strokeWeight(10);
-  pg.circle(w * 0.7, w * 0.3, w * 0.15);
-
-  for (let i = 0; i < 10000; i++) {
-    stroke(random(255));
-    strokeWeight(random(2));
-    point(random(width), random(height));
+  strokeWeight(2);
+  stroke(30);
+  noFill();
+  for(let i = 0; i < 10; i ++){
+    matRect(floor(random(-wn, wn)) * grid, floor(random(-hn, hn)) * grid, floor(random(wn)) * grid, floor(random(hn))*grid, [
+      [1, random(-1, 1)],
+      [0, 1]
+    ]);
   }
+}
 
-  const grid = w / n;
-  const sx = (width - w) / 2;
-  const sy = (height - w) / 2;
-  for (let x = 0; x < w; x += grid) {
-    for (let y = 0; y < w; y += grid) {
-      const c = pg.get(x + grid / 2, y + grid / 2);
-      const g = (red(c), green(c), blue(c)) / 3 / 255;
-      fill(c);
-      noStroke();
-      rect(sx + x, sy + y, grid, grid);
-    }
+function gridLine(grid) {
+  for(let x = grid/2; x < width; x += grid){
+    line(x, 0, x, height);
   }
+  for(let y = grid/2; y < height; y += grid){
+    line(0, y, width, y);
+  }
+}
 
-  pg.remove();
+function matMult(mat1, mat2) {
+  const a = mat1[0][0] * mat2[0][0] + mat1[0][1] * mat2[1][0];
+  const b = mat1[0][0] * mat2[0][1] + mat1[0][1] * mat2[1][1];
+  const c = mat1[1][0] * mat2[0][0] + mat1[1][1] * mat2[1][0];
+  const d = mat1[1][0] * mat2[0][1] + mat1[1][1] * mat2[1][1];
+  return [[a, b], [c, d]]
+}
 
-  noLoop();
+function matRect(x, y, w, h, mat) {
+  let p = [];
+  p[0] = createVector(x * mat[0][0] + y * mat[0][1], x * mat[1][0] + y * mat[1][1]);
+  p[1] = createVector((x + w) * mat[0][0] + y * mat[0][1], (x + w) * mat[1][0] + y * mat[1][1]);
+  p[2] = createVector((x + w) * mat[0][0] + (y + h) * mat[0][1], (x + w) * mat[1][0] + (y + h) * mat[1][1]);
+  p[3] = createVector(x * mat[0][0] + (y + h) * mat[0][1], x * mat[1][0] + (y + h) * mat[1][1]);
+
+  push();
+  translate(-w/2, -h/2);
+  beginShape();
+  for(let i in p){
+    vertex(p[i].x, p[i].y);
+  }
+  endShape(CLOSE);
+  pop();
 }
 
 class Easing {
@@ -199,7 +173,8 @@ class Easing {
   }
 }
 
-const colorPalletes = [{
+const colorPalletes = [
+  {
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

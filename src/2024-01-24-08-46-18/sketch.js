@@ -1,10 +1,153 @@
+const s = 100;
+let t = 0;
+let cp;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight, WEBGL);
+  cp = random(colorPalletes).colors;
 }
 
 function draw() {
-  background(220);
+  background(255);
+
+  // angle : 0.732
+  const angle = 0.732 + Easing.easeInOutExpo(fract(t))*TAU;
+  const h = 243;
+  const r = 2678;
+  camera(r*sin(angle), h, r*cos(angle), 0, 0, 0, 0, -1, 0);
+
+  push();
+  translate(-s * 2, -s*2, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(-s * 2, -s, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(-s * 2, 0, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(-s * 2, s, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(-s * 2, s*2, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(-s * 1, -s * 2, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(0, -s * 2, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, -s * 2, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, -s * 1, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, 0, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, s, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, s * 2, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, s * 3, 0);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, s * 3, s);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, s * 3, s * 2);
+  drawBox(s, cp);
+  pop();
+
+  push();
+  translate(s, s * 3, s * 3);
+  drawBox(s, cp);
+  pop();
+
+  t += 0.005;
+}
+
+function drawBox(size, faceColors) {
+  // 各面の色を設定
+  fill(faceColors[0%faceColors.length]); // 底面
+  beginShape();
+  vertex(-size / 2, -size / 2, 0);
+  vertex(size / 2, -size / 2, 0);
+  vertex(size / 2, size / 2, 0);
+  vertex(-size / 2, size / 2, 0);
+  endShape(CLOSE);
+
+  fill(faceColors[1%faceColors.length]); // 上面
+  beginShape();
+  vertex(-size / 2, -size / 2, size);
+  vertex(size / 2, -size / 2, size);
+  vertex(size / 2, size / 2, size);
+  vertex(-size / 2, size / 2, size);
+  endShape(CLOSE);
+
+  fill(faceColors[2%faceColors.length]); // 側面1
+  beginShape();
+  vertex(-size / 2, -size / 2, 0);
+  vertex(-size / 2, -size / 2, size);
+  vertex(-size / 2, size / 2, size);
+  vertex(-size / 2, size / 2, 0);
+  endShape(CLOSE);
+
+  fill(faceColors[3%faceColors.length]); // 側面2
+  beginShape();
+  vertex(size / 2, -size / 2, 0);
+  vertex(size / 2, -size / 2, size);
+  vertex(size / 2, size / 2, size);
+  vertex(size / 2, size / 2, 0);
+  endShape(CLOSE);
+
+  fill(faceColors[4%faceColors.length]); // 側面3
+  beginShape();
+  vertex(-size / 2, -size / 2, 0);
+  vertex(-size / 2, -size / 2, size);
+  vertex(size / 2, -size / 2, size);
+  vertex(size / 2, -size / 2, 0);
+  endShape(CLOSE);
+
+  fill(faceColors[5%faceColors.length]); // 側面4
+  beginShape();
+  vertex(-size / 2, size / 2, 0);
+  vertex(-size / 2, size / 2, size);
+  vertex(size / 2, size / 2, size);
+  vertex(size / 2, size / 2, 0);
+  endShape(CLOSE);
 }
 
 class Easing {

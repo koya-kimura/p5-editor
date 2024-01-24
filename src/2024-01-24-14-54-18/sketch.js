@@ -1,40 +1,53 @@
+let cp;
 let particles = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  cp = random(colorPalletes).colors;
 }
 
 function draw() {
-  background(0, 10);
+  background(0, 7);
 
-  if(frameCount%100==10){
+  if (frameCount % 40 == 10) {
     const x = random(width);
-    for(let i = 0; i < 100; i ++){
-      particles.push(new Particle(x));
+    const v = pow(random(1, 3), 2);
+    const c = random(cp);
+    for (let i = 0; i < 100; i++) {
+      particles.push(new Particle(x, v, c));
     }
   }
 
-  for(let i in particles){
+  for (let i in particles) {
     particles[i].move();
     particles[i].display();
+
+
+    if (particles[i].p.y > height + 100) {
+      particles.splice(i, 1);
+    }
   }
 }
 
 class Particle {
-  constructor(x){
+  constructor(x, v, c) {
     this.p = createVector(x, height);
-    this.v = createVector(random(-3, 3), random(-5, -10));
+    this.v = createVector(random(-3, 3), -v - random(2));
+    this.c = c;
+    this.a = 350 - abs(this.v.x) * 100;
+    this.s = 10 - abs(this.v.x) * 2;
   }
 
-  move(){
+  move() {
     this.p.add(this.v);
     this.v.y += 0.05;
   }
 
-  display(){
-    fill(255);
+  display() {
+    fill(red(this.c), green(this.c), blue(this.c), this.a);
     noStroke();
-    circle(this.p.x, this.p.y, 5);
+
+    circle(this.p.x, this.p.y, this.s);
   }
 }
 
@@ -146,8 +159,7 @@ class Easing {
   }
 }
 
-const colorPalletes = [
-  {
+const colorPalletes = [{
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

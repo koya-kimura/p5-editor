@@ -1,4 +1,4 @@
-const n = 5;
+const n = 6;
 let rectangle = [];
 
 function setup() {
@@ -8,30 +8,38 @@ function setup() {
   const cp = random(colorPalletes).colors;
   for (let x = 0; x < n + 1; x++) {
     for (let y = 0; y < n; y++) {
-      rectangle.push(new Rect(x * s.x, y * s.y, s.x, s.y, cp));
+      rectangle.push(new Rect(x * s.x, y * s.y, s.x, s.y, cp, floor(noise(x,y)*1000)));
     }
   }
 }
 
 function draw() {
-  background(220);
+  background(250);
 
+  strokeWeight(1);
+  stroke(220);
+  gridLine(20);
+
+  const period = 700;
   for (let i in rectangle) {
     rectangle[i].move();
-    rectangle[i].display(max(abs(frameCount%500-250)-100, 0)/100);
+    rectangle[i].display(max(abs(frameCount%period-period*0.5)-period*0.2, 0)/(period*0.15));
   }
 }
 
 class Rect {
-  constructor(x, y, w, h, cp) {
+  constructor(x, y, w, h, cp, i) {
+    this.index = i;
+
     this.pg = createGraphics(w, h);
     this.p = createVector(x, y);
     this.v = createVector(-1, 0);
+    this.s = createVector(w, h);
+    this.d = random([createVector(1, 0), createVector(-1, 0), createVector(0, 1), createVector(0, -1)]);
+
     this.cp = cp;
     this.bg = random(cp);
     this.c = random(cp);
-    this.s = createVector(w, h);
-    this.d = random([[0, 1],[0, -1],[1, 0],[-1, 0]]);
   }
 
   move() {
@@ -41,18 +49,41 @@ class Rect {
     }
   }
 
-  display(t) {
-    const a = this.s.copy().mult(Easing.easeInOutExpo(t));
-    a.x *= this.d[0];
-    a.y *= this.d[1];
+  pgDraw(x, y, w, h){
+    this.pg.push();
 
+    this.pg.translate(x, y);
     this.pg.background(this.bg);
     this.pg.noStroke();
     this.pg.fill(this.c);
-    this.pg.rect(a.x, a.y, this.s.x, this.s.y);
+    this.pg.rect(0, 0, w, h);
 
-    image(this.pg, this.p.x, this.p.y);
+    for(let i = 0; i < 5; i ++){
+      this.pg.fill(this.cp[floor(noise(this.index, i)*this.cp.length)]);
+      this.pg.circle(w / 2, h / 2, min(w+h) * 0.15 + min(w+h) * 0.15 * sin(this.index + i + frameCount / (this.index/20+20)));
+    }
+
+    this.pg.pop();
+  }
+
+  display(t) {
+    let pos = this.s.copy().mult(Easing.easeInOutExpo(t));
+    pos.mult(this.d);
+
+    this.pgDraw(pos.x, pos.y, this.s.x, this.s.y);
+
+    const scl = 0.9;
+    image(this.pg, this.p.x, this.p.y, this.s.x*scl, this.s.y*scl);
     this.pg.remove();
+  }
+}
+
+function gridLine(grid) {
+  for (let x = grid / 2; x < width; x += grid) {
+    line(x, 0, x, height);
+  }
+  for (let y = grid / 2; y < height; y += grid) {
+    line(0, y, width, y);
   }
 }
 

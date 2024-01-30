@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+}
+
+canvas {
+    display: block;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
+
+header h1 {
+    color: azure;
+    margin: 0;
+    tab-size: 50px;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+.p5-canvas {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.color-pick {
+    margin: 0 auto;
+    display: flex;
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    height: 5vh;
+}
+
+.colorPicker {
+    margin: 0 30px;
+}

@@ -23,13 +23,17 @@ function setup() {
 }
 
 function draw() {
-  background(colors[0]);
+  const normalizeColors = colors2arr(colors);
 
   shader(theShader);
 
   theShader.setUniform("u_time", frameCount / 100);
   theShader.setUniform("u_tex", capture);
-  // theShader.setUniform('u_colors', colors2arr(colors));
+  theShader.setUniform('u_color0', normalizeColors[0]);
+  theShader.setUniform('u_color1', normalizeColors[1]);
+  theShader.setUniform('u_color2', normalizeColors[2]);
+  theShader.setUniform('u_color3', normalizeColors[3]);
+  theShader.setUniform('u_color4', normalizeColors[4]);
 
   rect(0, 0, width, height);
 }

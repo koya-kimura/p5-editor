@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: #000;
+    background: #f7f7f7;
 }
 
 canvas {
@@ -16,7 +16,7 @@ header {
 }
 
 header h1 {
-    color: azure;
+    color: rgb(18, 18, 18);
     margin: 0;
     tab-size: 50px;
     letter-spacing: 5px;

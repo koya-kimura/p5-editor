@@ -1,80 +1,20 @@
-let textAnimations = [];
-let ft = [];
-let cp;
+let data;
 
-let texts = [];
-
-const msg = ["HELLO", "THANKS"];
-
-function preload() {
-  ft[0] = loadFont("../../assets/font/NotoSans_Condensed-BoldItalic.ttf");
+function preload(){
+  data = loadTable("sample.csv");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  cp = random(colorPalletes).colors;
-
-  for(let i = 0; i < 20; i ++){
-    const animationOptions = {
-      text: random(msg),
-      x: random(width),
-      y: random(height),
-      color: random(cp),
-      size: min(width, height) * random(0.05, 0.2),
-      animationStartTime: i,
-      animationTime: 3,
-      inAnimationTime: 1,
-      outAnimationTime: 1,
-      font: random(ft),
-      inAnimation: random(["fadeIn", "slideInLeft", "slideInRight", "slideInUp", "slideInDown", "zoomIn"]),
-      outAnimation: random(["fadeOut", "slideOutLeft", "slideOutRight", "slideOutUp", "slideOutDown", "zoomOut"]),
-      mode: "CORNER",
-    };
-  textAnimations.push(new TextAnimation(animationOptions));
-  }
+    for (let i = 1; i < data.getRowCount(); i++) {
+      const name = data.get(i, 0);
+      console.log(name);
+    }
 }
 
 function draw() {
-  background(240);
-
-  stroke(187, 206, 207, 150);
-  gridLine(50);
-
-  for (let i in textAnimations) {
-    textAnimations[i].move();
-    textAnimations[i].display();
-  }
-
-  for (let i in textAnimations) {
-    if (textAnimations[i].end) {
-      textAnimations.splice(i, 1);
-    }
-  }
-}
-
-function gridLine(grid) {
-  let index = 0;
-  for (let x = grid / 2; x < width; x += grid) {
-    if (index % 2 == 0) {
-      drawingContext.setLineDash([1, 1]);
-    } else {
-      drawingContext.setLineDash([5, 5]);
-    }
-    line(x, 0, x, height);
-    index++;
-  }
-
-  index = 0;
-  for (let y = grid / 2; y < height; y += grid) {
-    if (index % 2 == 0) {
-      drawingContext.setLineDash([1, 1]);
-    } else {
-      drawingContext.setLineDash([5, 5]);
-    }
-    line(0, y, width, y);
-    index++;
-  }
+  background(220);
 }
 
 class Easing {
@@ -185,7 +125,8 @@ class Easing {
   }
 }
 
-const colorPalletes = [{
+const colorPalletes = [
+  {
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

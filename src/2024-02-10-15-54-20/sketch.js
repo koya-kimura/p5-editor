@@ -24,18 +24,8 @@ function draw() {
   background(220);
 
   pg.background(255);
-  for (let i = 0; i < 100; i++) {
-    pg.noFill();
-    pg.stroke(cp[i % cp.length])
-    pg.circle(noise(i, 37) * width, noise(i, 91) * height, 200);
-  }
-
-  for(let i = 0; i < 100; i ++){
-    pg.noStroke();
-    pg.fill(cp[i%cp.length])
-    pg.circle(noise(i, 21, frameCount/100)*width, noise(i, 19, frameCount/100)*height, 100);
-  }
-  // pg.image(capture, 0, 0, width, height);
+  pg.imageMode(CENTER);
+  pg.image(capture, width / 2 + cos(frameCount / 10) * 10, height / 2 + sin(frameCount / 10) * 10, width * 1.2, height * 1.2);
 
   shader(theShader);
 

@@ -38,10 +38,14 @@ void main(void) {
     float d = sqrt(pow(col.r-precol.r, 2.)+pow(col.g-precol.g,2.)+pow(col.b-precol.b, 2.));
 
     vec2 newuv = uv;
-    if(d > 0.2){
-        col.rgb = vec3(1., 0., 0.);
+    if(d < .05){
+        col.rgb=vec3(0);
+    } else if(d < .1) {
+        col.rgb=vec3(1.,0.,0.);
+    } else if(d < .15){
+        col.rgb=vec3(0.,1.,0.);
     } else {
-        col.rgb = vec3((col.r+col.g+col.b)/3.);
+        col.rgb=vec3(0.,0.,1.);
     }
 
     gl_FragColor = col;

@@ -1,32 +1,64 @@
+const n = 1000;
+let p = [];
+
+let pg;
+
 let bgm;
 let fft;
 
-function preload() {
-  bgm = loadSound("../../assets/sound/Kikai-Jikake-no-Kokoro_Long_FreeVer.mp3")
+const maxTimeSpeed = 10;
+
+function preload(){
+  bgm = loadSound("../../assets/sound/Love_This_Beat_free_BGM_ver.mp3");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(0);
+
+  pg = createGraphics(width, height);
+
+  imageMode(CENTER);
+
+  pg.noStroke();
+  for(let i = 0; i < n; i ++){
+    p[i] =  createVector((i+0.5)*width/n, random(height));
+  }
 
   fft = new p5.FFT(0.8, 32);
 }
 
 function draw() {
-  background(220);
+  pg.background(0, 50);
 
   let spm = fft.analyze();
   for (let i in spm) {
     spm[i] = map(spm[i], 0, 255, 0, 1);
   }
 
+  for(let i in p){
+    p[i].y -= floor(pow(spm[10], 2) * maxTimeSpeed);
+    if (p[i].y < -100){
+      p[i].y = height;
+    }
 
+    pg.circle(p[i].x, p[i].y, 10);
+  }
+
+  pg.circle(width / 2, height / 2, spm[15] * width / 2);
+
+  push();
+  translate(-width/2, -height/2);
+  rotate(frameCount/100);
+  image(pg, 0, 0);
+  pop();
 }
 
 function mousePressed() {
   if (bgm.isPlaying()) {
     bgm.pause();
   } else {
-    bgm.setVolume(0.3)
+    bgm.setVolume(0.3);
     bgm.loop();
   }
 }
@@ -139,7 +171,8 @@ class Easing {
   }
 }
 
-const colorPalletes = [{
+const colorPalletes = [
+  {
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

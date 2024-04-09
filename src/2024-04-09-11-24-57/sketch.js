@@ -1,4 +1,4 @@
-const n = 2000;
+const n = 3000;
 let r = [];
 let th = [];
 let c = [];

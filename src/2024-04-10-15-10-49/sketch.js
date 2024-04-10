@@ -31,7 +31,7 @@ function setup() {
 }
 
 const colorPalletes = [
-  {
+  { 
     name: "DeepEmeraldGold",
     colors: ["#005e55", "#fff9bf", "#edb50c", "#b8003d", "#5e001f"],
   },

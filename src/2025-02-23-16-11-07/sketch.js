@@ -7,7 +7,25 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  const palette = colorPalletes[1].colors;
+  const n = floor(gvm.count() / 8);
+  const c1 = palette[n % palette.length];
+  const c2 = palette[(n + 1) % palette.length];
+
+  grad.setStyle(c1, "grad")
+  grad.adjustedRect(width/2, height/2, width, height);
+
+  for(let i = 0; i < 10; i ++){
+    for (let angle = 0; angle < TAU; angle += TAU / 8) {
+      const r = map(gvm.leapNoise(8, 4, [i, 0]), 0, 1, 0.1, 0.85) * min(width, height) / 2;
+      const x = width / 2 + cos(angle + frameCount * 0.003 + TAU * i / 10) * r;
+      const y = height / 2 + sin(angle + frameCount * 0.003 + TAU * i / 10) * r;
+      const s = map(Easing.easeInOutSine(abs((gvm.count() / 2) % 2 - 1)), 0, 1, 0.8, 1.2) * map(pow(gvm.leapNoise(8, 4, [i, 0]), 2), 0, 1, 0.01, 0.2) * min(width, height);
+
+      grad.setStyle(c2, "grad");
+      grad.adjustedEllipse(x, y, s, s);
+    }
+  }
 }
 
 function windowResized() {

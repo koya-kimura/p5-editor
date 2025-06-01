@@ -2,12 +2,43 @@ const BPM = 100;
 const gvm = new GVM(BPM);
 const grad = new GradStyle();
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
+let img;
+
+function preload(){
+  img = loadImage("../../assets/image/rose.jpg")
 }
 
-function draw() {
-  background(220);
+function setup() {
+  createCanvas(windowWidth, windowHeight, WEBGL);
+  img.resize(width, 0);
+
+  background(0);
+
+  const n = 30;
+  const m = floor(n * 9 / 16) + 1;
+  for (let i = -n; i <= n; i++) {
+    for (let j = -m; j <= m; j++) {
+      const s = width / (2 * n);
+      const x = i * s;
+      const y = j * s;
+      const z = noise(i, j) * s * 3;
+
+      const tex = createGraphics(s, s);
+      tex.image(img, 0, 0, s * map(noise(i, j, 7), 0, 1, 0.5, 1.5), s * map(noise(i, j, 8), 0, 1, 0.5, 1.5), x + width / 2, y + height / 2, s, s);
+
+      push();
+      translate(x, y, z);
+      texture(tex);
+      noStroke();
+      
+      rotateX(map(floor(noise(i, j, 1) * 10) / 10, 0, 1, -PI/4, PI/4));
+      rotateY(map(floor(noise(i, j, 2) * 10) / 10, 0, 1, -PI/4, PI/4));
+      rotateZ(map(floor(noise(i, j, 3) * 10) / 10, 0, 1, -PI/4, PI/4));
+
+      box(s);
+      pop();
+    }
+  }
 }
 
 function windowResized() {

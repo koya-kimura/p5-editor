@@ -12,7 +12,7 @@ if [ "$userInput" != "basic" ] && [ "$userInput" != "shader" ] && [ "$userInput"
 fi
 # ------------------------------
 
-# 現在の日時を変数に格納 (例: 2025-10-17-22-40-38)
+# 現在の日時を変数に格納 (例: 2025-10-18-09-43-10)
 now=$(date +%Y-%m-%d-%H-%M-%S)
 
 # 各ファイル/ディレクトリのパスを定義
@@ -20,13 +20,22 @@ md_file_path="memo/index.md"
 content_file_path="src/${now}" # 新しいコンテンツディレクトリのパス
 
 # テンプレートディレクトリを新しい日時のディレクトリ名でコピー
-# 例: templete/basic を src/2025-10-17-22-40-38 にコピー
+# 例: templete/basic を src/2025-10-18-09-43-10 にコピー
 cp -R "templete/${userInput}" "${content_file_path}"
 
 # VS Codeでコピーしたディレクトリ内の主要ファイルを開く
 # -r オプションは、すでに開いているウィンドウでファイルを開くことを試みます
 code -r "${content_file_path}/sketch.js"
 code -r "${content_file_path}/index.html"
+
+# ------------------------------
+# ✨ shader 選択時の追加ファイル処理
+# ------------------------------
+if [ "$userInput" = "shader" ]; then
+    echo "💡 shader テンプレートが選択されました。main.frag を開きます。"
+    code -r "${content_file_path}/main.frag"
+fi
+# ------------------------------
 
 # index.mdに新しいエントリを追記
 # 追記する文字列: 改行と、[日時] (src/日時) の形式のリンク

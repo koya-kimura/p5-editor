@@ -27,6 +27,10 @@ vec2 pol2xy(vec2 pol){
     return pol.y*vec2(cos(pol.x),sin(pol.x));
 }
 
+float map(float value,float min1,float max1,float min2,float max2){
+    return min2+(value-min1)*(max2-min2)/(max1-min1);
+}
+
 void main(void) {
     vec2 uv = vTexCoord;
 

@@ -16,7 +16,6 @@ fi
 now=$(date +%Y-%m-%d-%H-%M-%S)
 
 # 各ファイル/ディレクトリのパスを定義
-md_file_path="memo/index.md"
 content_file_path="src/${now}" # 新しいコンテンツディレクトリのパス
 
 # テンプレートディレクトリを新しい日時のディレクトリ名でコピー
@@ -43,4 +42,3 @@ echo -e "\n - [${now}] (../${content_file_path})" >> "${md_file_path}"
 
 # 完了メッセージを分かりやすく表示
 echo "✅ テンプレート '${userInput}' を基に、'${content_file_path}' を作成しました。"
-echo "🔗 '${md_file_path}' にリンクを追記しました。"

@@ -8,6 +8,7 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   tex = createGraphics(width, height);
+  noCursor();
 }
 
 function draw() {
